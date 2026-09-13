@@ -7,7 +7,7 @@
   de quedarse con una copia vieja guardada en caché.
   ---------------------------------------------------------------
 */
-const CACHE_VERSION = 'v1';
+const CACHE_VERSION = 'v2';
 const CACHE_NAME = `la-jefa-908-la-celia-${CACHE_VERSION}`;
 
 // Archivos "estáticos" que se pueden guardar en caché sin problema
