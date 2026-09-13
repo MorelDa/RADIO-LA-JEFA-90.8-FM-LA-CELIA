@@ -1,0 +1,828 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+<title>La Jefa 90.8 FM — En Vivo | La Celia</title>
+<meta name="description" content="La Jefa 90.8 FM — La Celia, transmitiendo en vivo las 24 horas.">
+
+<!-- ============ PWA ============ -->
+<link rel="manifest" href="manifest.json">
+<meta name="theme-color" content="#0a0b0f">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="La Jefa 90.8">
+
+<!-- ============ Favicons ============ -->
+<link rel="icon" href="icons/favicon.ico" sizes="any">
+<link rel="icon" type="image/png" sizes="32x32" href="icons/favicon-32x32.png">
+<link rel="icon" type="image/png" sizes="16x16" href="icons/favicon-16x16.png">
+<link rel="apple-touch-icon" sizes="180x180" href="icons/apple-touch-icon.png">
+<link rel="icon" type="image/png" sizes="192x192" href="icons/icon-192.png">
+
+<!-- ============ Open Graph / compartir en redes ============ -->
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="La Jefa 90.8 FM">
+<meta property="og:title" content="La Jefa 90.8 FM — En Vivo | La Celia">
+<meta property="og:description" content="La Jefa 90.8 FM — La Celia, transmitiendo en vivo las 24 horas.">
+<meta property="og:image" content="https://i.ibb.co/tpH9r9bQ/Remover-fundo-10.png">
+<meta property="og:image:width" content="2048">
+<meta property="og:image:height" content="2048">
+<!-- IMPORTANTE: reemplaza esta URL por tu dominio real una vez publicado -->
+<meta property="og:url" content="https://la-jefa-908-fm-la-celia.vercel.app/">
+
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="La Jefa 90.8 FM — En Vivo">
+<meta name="twitter:description" content="La Jefa 90.8 FM — La Celia, transmitiendo en vivo las 24 horas.">
+<meta name="twitter:image" content="https://i.ibb.co/tpH9r9bQ/Remover-fundo-10.png">
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Archivo+Black&family=Archivo:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg-0:#0a0b0f;
+    --bg-1:#14161c;
+    --cyan:#29d6ee;
+    --lime:#e8c34c;
+    --magenta:#ff3fb0;
+    --ink:#f5f4f0;
+    --ink-dim:#a4acb3;
+    --line:#242c34;
+    --mini-h:74px;
+    --safe-b: env(safe-area-inset-bottom, 0px);
+    --safe-t: env(safe-area-inset-top, 0px);
+  }
+
+  *{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent;}
+
+  html,body{
+    height:100%;
+    overflow:hidden;
+    overscroll-behavior:none;
+    position:fixed;
+    inset:0;
+    width:100%;
+  }
+
+  body{
+    background:var(--bg-0);
+    color:var(--ink);
+    font-family:'Archivo',sans-serif;
+    touch-action:pan-x;
+  }
+
+  button{font-family:inherit;}
+  img{-webkit-user-drag:none;user-select:none;}
+
+  /* ============================================================
+     SPLASH / INTRO — pantalla de bienvenida con el logo
+  ============================================================ */
+  #splash-screen{
+    position:fixed;inset:0;z-index:999;
+    background:
+      radial-gradient(120% 80% at 50% 20%, rgba(26,215,253,.30), transparent 60%),
+      var(--bg-0);
+    display:flex;flex-direction:column;align-items:center;justify-content:center;
+    gap:22px;
+    transition:opacity .55s ease, visibility .55s ease;
+  }
+  #splash-screen.hide{opacity:0;visibility:hidden;pointer-events:none;}
+
+  .splash-logo-wrap{
+    width:156px;height:156px;border-radius:50%;
+    display:flex;align-items:center;justify-content:center;
+    box-shadow:0 0 0 2px var(--cyan), 0 0 60px -10px rgba(26,215,253,.75);
+    overflow:hidden;
+    animation:splash-pop .7s cubic-bezier(.34,1.56,.64,1) both, splash-pulse 1.8s ease-in-out .7s infinite;
+  }
+  .splash-logo-wrap img{width:100%;height:100%;object-fit:cover;}
+  @keyframes splash-pop{
+    0%{transform:scale(.4);opacity:0;}
+    100%{transform:scale(1);opacity:1;}
+  }
+  @keyframes splash-pulse{
+    0%,100%{box-shadow:0 0 0 2px var(--cyan), 0 0 40px -10px rgba(26,215,253,.6);}
+    50%{box-shadow:0 0 0 2px var(--cyan), 0 0 70px -5px rgba(226,250,16,.85);}
+  }
+  .splash-brand{
+    font-family:'Archivo Black',sans-serif;
+    font-size:22px;letter-spacing:.04em;
+    opacity:0;animation:splash-fade-in .6s ease .35s forwards;
+  }
+  .splash-tagline{
+    font-size:12px;color:var(--ink-dim);letter-spacing:.15em;text-transform:uppercase;
+    opacity:0;animation:splash-fade-in .6s ease .55s forwards;
+  }
+  @keyframes splash-fade-in{
+    from{opacity:0;transform:translateY(6px);}
+    to{opacity:1;transform:translateY(0);}
+  }
+  .splash-bar{
+    width:120px;height:3px;border-radius:3px;background:var(--line);overflow:hidden;
+    opacity:0;animation:splash-fade-in .5s ease .75s forwards;
+  }
+  .splash-bar span{
+    display:block;height:100%;width:40%;background:var(--cyan);
+    animation:splash-loading 1.1s ease-in-out infinite;
+  }
+  @keyframes splash-loading{
+    0%{transform:translateX(-100%);}
+    100%{transform:translateX(350%);}
+  }
+
+  /* ============================================================
+     VISTA 1 — INICIO (portada a pantalla completa, foto + overlay)
+  ============================================================ */
+  #home-view{
+    position:fixed;
+    inset:0;
+    height:100dvh;
+    display:flex;
+    flex-direction:column;
+    background:
+      linear-gradient(180deg, rgba(9,12,16,.15) 0%, rgba(9,12,16,.6) 58%, var(--bg-0) 92%),
+      radial-gradient(120% 70% at 78% 18%, rgba(26,215,253,.28), transparent 60%);
+    padding-bottom: calc(var(--mini-h) + var(--safe-b));
+    padding-top: var(--safe-t);
+    overflow:hidden;
+  }
+
+  /* Video de fondo a pantalla completa */
+  .hero-video{
+    position:absolute;
+    inset:0;
+    z-index:0;
+    width:100%;
+    height:100%;
+    object-fit:cover;
+    object-position:center;
+    opacity:.8;
+  }
+  /* Overlay de color difuminado sobre el video */
+  .hero-red-overlay{
+    position:absolute;inset:0;z-index:1;pointer-events:none;
+    background:
+      radial-gradient(90% 60% at 50% 100%, rgba(26,215,253,.5) 0%, rgba(26,215,253,.0) 65%),
+      linear-gradient(180deg, rgba(26,215,253,.24) 0%, rgba(9,12,16,0) 45%);
+    mix-blend-mode:screen;
+  }
+  .grain{
+    position:absolute;inset:0;z-index:2;pointer-events:none;
+    background-image:repeating-linear-gradient(115deg, rgba(255,255,255,.02) 0 2px, transparent 2px 46px);
+  }
+
+  header{
+    position:relative;z-index:3;
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    padding:22px clamp(20px,5vw,64px);
+    gap:12px;
+    flex-shrink:0;
+  }
+  .brand{display:flex;align-items:center;gap:10px;min-width:0;}
+  .brand-mark{
+    width:44px;height:44px;border-radius:50%;background:var(--bg-1);
+    border:2px solid var(--cyan);
+    display:flex;align-items:center;justify-content:center;
+    font-family:'Archivo Black',sans-serif;font-size:13px;flex-shrink:0;
+    overflow:hidden;
+  }
+  .brand-mark img{width:100%;height:100%;object-fit:cover;}
+  .brand-name{font-family:'Archivo Black',sans-serif;font-size:15px;letter-spacing:.02em;white-space:nowrap;}
+
+  .header-actions{display:flex;align-items:center;gap:10px;flex-shrink:0;}
+
+  /* Botón compartir + botón instalar PWA */
+  #share-btn,
+  #install-btn{
+    display:inline-flex;
+    align-items:center;gap:8px;
+    padding:10px 16px;border-radius:999px;
+    font-weight:800;font-size:12.5px;letter-spacing:.02em;
+    border:none;cursor:pointer;flex-shrink:0;
+    transition:transform .15s ease;
+    white-space:nowrap;
+  }
+  #share-btn:active,
+  #install-btn:active{transform:scale(.95);}
+  #share-btn svg,
+  #install-btn svg{width:16px;height:16px;flex-shrink:0;}
+
+  #share-btn{
+    background:rgba(245,244,240,.08);
+    color:var(--ink);
+    border:1px solid var(--line);
+  }
+
+  #install-btn{
+    display:none;
+    background:var(--cyan);color:var(--bg-0);
+    box-shadow:0 10px 24px -10px rgba(41,214,238,.8);
+  }
+  #install-btn.show{display:inline-flex;}
+
+  .hero{
+    position:relative;z-index:3;
+    flex:1;
+    display:flex;
+    flex-direction:column;
+    justify-content:flex-end;
+    gap:14px;
+    padding:24px clamp(20px,6vw,64px) 26px;
+    min-height:0;
+  }
+
+  .live-pill{
+    display:inline-flex;align-items:center;gap:8px;
+    padding:8px 18px 8px 14px;border-radius:999px;
+    background:var(--cyan);
+    font-size:13px;letter-spacing:.03em;color:var(--bg-0);font-weight:800;
+    width:fit-content;
+  }
+  .live-dot{
+    width:8px;height:8px;border-radius:50%;background:var(--bg-0);
+    animation:pulse 1.6s infinite;
+  }
+  @keyframes pulse{
+    0%{box-shadow:0 0 0 0 rgba(9,12,16,.55);}
+    70%{box-shadow:0 0 0 9px rgba(9,12,16,0);}
+    100%{box-shadow:0 0 0 0 rgba(9,12,16,0);}
+  }
+
+  .hero h1{
+    font-family:'Archivo Black',sans-serif;
+    font-size:clamp(30px,8vw,46px);
+    letter-spacing:.005em;
+    line-height:1.02;
+    max-width:14ch;
+  }
+  .hero h1 .accent{color:var(--lime);}
+  .hero p.tagline{color:var(--ink-dim);font-size:14px;font-weight:600;letter-spacing:.06em;text-transform:uppercase;}
+
+  /* ---- Mini reproductor (barra fija inferior, funcional) ---- */
+  #mini-bar{
+    position:fixed;
+    left:0;right:0;
+    bottom:0;
+    height:calc(var(--mini-h) + var(--safe-b));
+    padding-bottom:var(--safe-b);
+    background:#10141a;
+    border-top:1px solid var(--line);
+    display:flex;
+    align-items:center;
+    gap:14px;
+    padding-left:16px;padding-right:16px;
+    cursor:pointer;
+    z-index:20;
+    box-shadow:0 -8px 30px -10px rgba(0,0,0,.5);
+  }
+  #mini-bar .mini-mark{
+    width:44px;height:44px;border-radius:50%;flex-shrink:0;
+    background:var(--bg-0);border:2px solid var(--cyan);
+    display:flex;align-items:center;justify-content:center;
+    font-family:'Archivo Black',sans-serif;font-size:10px;
+    overflow:hidden;
+  }
+  #mini-bar .mini-mark img{width:100%;height:100%;object-fit:cover;}
+  #mini-bar .mini-mark.spinning{animation:spin 9s linear infinite;}
+  @keyframes spin{to{transform:rotate(360deg);}}
+
+  .mini-info{flex:1;min-width:0;overflow:hidden;}
+  .mini-marquee{white-space:nowrap;}
+  .mini-info .t1{font-size:13px;font-weight:800;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+  .mini-info .t2{font-size:12px;color:var(--ink-dim);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+
+  /* Ecualizador animado */
+  .eq{display:flex;align-items:flex-end;gap:3px;height:22px;flex-shrink:0;}
+  .eq span{
+    width:3px;border-radius:2px;background:var(--lime);
+    animation:eqbar 1s ease-in-out infinite;
+    height:6px;
+  }
+  .eq.paused span{animation-play-state:paused;height:4px;background:var(--ink-dim);}
+  .eq span:nth-child(1){animation-duration:.8s;animation-delay:0s;}
+  .eq span:nth-child(2){animation-duration:1.1s;animation-delay:.1s;}
+  .eq span:nth-child(3){animation-duration:.7s;animation-delay:.15s;}
+  .eq span:nth-child(4){animation-duration:1s;animation-delay:.05s;}
+  .eq span:nth-child(5){animation-duration:.9s;animation-delay:.2s;}
+  @keyframes eqbar{
+    0%,100%{height:5px;}
+    50%{height:22px;}
+  }
+
+  #mini-play{
+    width:40px;height:40px;border-radius:50%;flex-shrink:0;
+    background:var(--cyan);border:none;color:var(--bg-0);
+    display:flex;align-items:center;justify-content:center;cursor:pointer;
+  }
+  #mini-play svg{width:16px;height:16px;}
+
+  #mini-vol-btn{
+    width:36px;height:36px;border-radius:50%;flex-shrink:0;
+    background:none;border:none;color:var(--ink-dim);cursor:pointer;
+    display:none;align-items:center;justify-content:center;
+  }
+  #mini-vol-btn svg{width:18px;height:18px;}
+  @media(min-width:480px){ #mini-vol-btn{display:flex;} }
+
+  /* ============================================================
+     VISTA 2 — REPRODUCTOR A PANTALLA COMPLETA
+  ============================================================ */
+  #player-view{
+    position:fixed;
+    inset:0;
+    background:var(--bg-0);
+    z-index:50;
+    display:flex;
+    flex-direction:column;
+    transform:translateY(100%);
+    transition:transform .38s cubic-bezier(.4,0,.2,1);
+    overflow-y:auto;
+    overscroll-behavior:contain;
+    padding-top:var(--safe-t);
+  }
+  #player-view.open{transform:translateY(0);}
+
+  .player-top{
+    display:flex;align-items:center;
+    padding:18px clamp(18px,5vw,40px);
+  }
+  #back-btn{
+    background:none;border:none;color:var(--ink);cursor:pointer;
+    width:38px;height:38px;display:flex;align-items:center;justify-content:center;
+    border-radius:50%;transition:background .15s;
+  }
+  #back-btn:hover{background:rgba(255,255,255,.06);}
+  #back-btn svg{width:22px;height:22px;}
+
+  .player-body{
+    flex:1;
+    display:flex;flex-direction:column;align-items:center;justify-content:center;
+    text-align:center;gap:22px;
+    padding:10px 24px 50px;
+  }
+
+  .disc-wrap{position:relative;width:min(60vw,270px);aspect-ratio:1/1;}
+  .disc{
+    width:100%;height:100%;border-radius:50%;
+    background:conic-gradient(from 220deg, var(--bg-1), #171b21 30%, var(--bg-1) 55%, #151920 80%, var(--bg-1));
+    border:6px solid #1b2027;
+    display:flex;align-items:center;justify-content:center;
+    box-shadow:0 30px 60px -20px rgba(26,215,253,.35), inset 0 0 0 1px rgba(255,255,255,.03);
+  }
+  .disc.spinning{animation:spin 9s linear infinite;}
+  .disc-core{
+    width:44%;height:44%;border-radius:50%;background:var(--bg-0);
+    border:3px solid var(--cyan);
+    display:flex;align-items:center;justify-content:center;
+    font-family:'Archivo Black',sans-serif;font-size:clamp(15px,4vw,20px);
+    overflow:hidden;
+  }
+  .disc-core img{width:100%;height:100%;object-fit:cover;}
+
+  .station-info h1{font-family:'Archivo Black',sans-serif;font-size:clamp(22px,5.5vw,30px);}
+  .station-info p{margin-top:6px;color:var(--ink-dim);font-size:14px;}
+
+  #track-title{font-size:13px;color:var(--lime);font-weight:600;min-height:16px;letter-spacing:.02em;}
+
+  .on-air-banner{
+    display:inline-flex;align-items:center;gap:8px;
+    padding:8px 22px;border-radius:999px;
+    background:var(--cyan);color:var(--bg-0);
+    font-weight:800;font-size:13px;letter-spacing:.04em;
+  }
+
+  .controls{display:flex;align-items:center;justify-content:center;gap:26px;}
+  .btn-round{
+    background:none;border:none;color:var(--ink);cursor:pointer;
+    display:flex;align-items:center;justify-content:center;
+    transition:transform .15s ease,color .15s ease;
+  }
+  .btn-round:hover{color:var(--cyan);}
+  .btn-round:active{transform:scale(.92);}
+  #play-btn{
+    width:76px;height:76px;border-radius:50%;background:var(--cyan);color:var(--bg-0);
+    box-shadow:0 12px 30px -10px rgba(26,215,253,.7);
+  }
+  #play-btn:hover{color:var(--bg-0);transform:scale(1.04);}
+  #play-btn svg{width:28px;height:28px;}
+  .btn-small svg{width:22px;height:22px;}
+
+  .volume-row{display:flex;align-items:center;gap:10px;width:100%;max-width:220px;}
+  input[type=range]{
+    -webkit-appearance:none;width:100%;height:4px;border-radius:4px;
+    background:var(--line);outline:none;cursor:pointer;
+  }
+  input[type=range]::-webkit-slider-thumb{
+    -webkit-appearance:none;width:14px;height:14px;border-radius:50%;
+    background:var(--lime);border:2px solid var(--bg-0);box-shadow:0 0 0 1px var(--lime);cursor:pointer;
+  }
+  input[type=range]::-moz-range-thumb{
+    width:14px;height:14px;border-radius:50%;background:var(--lime);
+    border:2px solid var(--bg-0);cursor:pointer;
+  }
+
+  #status-msg{font-size:12px;color:var(--ink-dim);min-height:14px;}
+
+  @media (max-width:420px){
+    header{padding:16px 16px;}
+    .header-actions{gap:8px;}
+    .hero{gap:12px;padding-bottom:20px;}
+    .controls{gap:18px;}
+    #share-btn span,
+    #install-btn span{display:none;}
+    #share-btn,
+    #install-btn{padding:10px;width:38px;height:38px;justify-content:center;border-radius:50%;}
+  }
+
+  /* Pantallas muy bajas (móviles pequeños en horizontal, etc.) */
+  @media (max-height:640px){
+    .hero h1{font-size:clamp(24px,7vw,34px);}
+    header{padding-top:14px;padding-bottom:8px;}
+  }
+</style>
+</head>
+<body>
+
+<!-- ============ SPLASH ============ -->
+<div id="splash-screen">
+  <div class="splash-logo-wrap">
+    <img src="icons/icon-192.png" alt="La Jefa 90.8 FM">
+  </div>
+  <div class="splash-brand">LA JEFA 90.8 FM</div>
+  <div class="splash-tagline">La Celia</div>
+  <div class="splash-bar"><span></span></div>
+</div>
+
+<!-- ============ VISTA 1: INICIO ============ -->
+<div id="home-view">
+
+  <video class="hero-video" autoplay muted loop playsinline aria-hidden="true">
+    <source src="https://github.com/MorelDa/party-music/raw/refs/heads/main/Ney_Pereira_RJ_pindown.io_1788530495.mp4" type="video/mp4">
+  </video>
+  <div class="hero-red-overlay"></div>
+  <div class="grain"></div>
+
+  <header>
+    <div class="brand">
+      <div class="brand-mark"><img src="icons/icon-192.png" alt="La Jefa 90.8 FM"></div>
+      <div class="brand-name">LA JEFA 90.8 FM</div>
+    </div>
+    <div class="header-actions">
+      <button id="share-btn" aria-label="Compartir">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/><line x1="8.6" y1="10.5" x2="15.4" y2="6.5"/><line x1="8.6" y1="13.5" x2="15.4" y2="17.5"/></svg>
+        <span>Compartir</span>
+      </button>
+      <button id="install-btn" aria-label="Instalar aplicación">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3v13"/><path d="M7 11l5 5 5-5"/><path d="M5 21h14"/></svg>
+        <span>Instalar App</span>
+      </button>
+    </div>
+  </header>
+
+  <div class="hero">
+    <span class="live-pill"><span class="live-dot"></span>EN DIRECTO</span>
+    <h1>LA JEFA <span class="accent">90.8 FM</span></h1>
+    <p class="tagline">La Celia</p>
+  </div>
+</div>
+
+<!-- Mini reproductor: barra inferior fija, siempre visible y funcional -->
+<div id="mini-bar">
+  <div class="mini-mark" id="mini-mark"><img src="icons/icon-192.png" alt="La Jefa 90.8 FM"></div>
+  <div class="mini-info" id="mini-open-target">
+    <div class="t1 mini-marquee" id="mini-title">La Jefa 90.8 FM</div>
+    <div class="t2" id="mini-subtitle">Toca para abrir el reproductor</div>
+  </div>
+  <div class="eq paused" id="mini-eq">
+    <span></span><span></span><span></span><span></span><span></span>
+  </div>
+  <button id="mini-vol-btn" aria-label="Silenciar">
+    <svg id="mini-vol-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"></polygon><path d="M15.54 8.46a5 5 0 0 1 0 7.07"></path><path d="M19.07 4.93a10 10 0 0 1 0 14.14"></path></svg>
+  </button>
+  <button id="mini-play" aria-label="Reproducir">
+    <svg id="mini-play-icon" viewBox="0 0 24 24" fill="currentColor"><polygon points="6 3 20 12 6 21 6 3"></polygon></svg>
+    <svg id="mini-pause-icon" viewBox="0 0 24 24" fill="currentColor" style="display:none;"><rect x="5" y="3" width="5" height="18"></rect><rect x="14" y="3" width="5" height="18"></rect></svg>
+  </button>
+</div>
+
+<!-- ============ VISTA 2: REPRODUCTOR COMPLETO ============ -->
+<div id="player-view">
+  <div class="player-top">
+    <button id="back-btn" aria-label="Volver">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="15 18 9 12 15 6"></polyline></svg>
+    </button>
+  </div>
+
+  <div class="player-body">
+
+    <div class="disc-wrap">
+      <div class="disc" id="disc">
+        <div class="disc-core"><img src="icons/icon-192.png" alt="La Jefa 90.8 FM"></div>
+      </div>
+    </div>
+
+    <div class="station-info">
+      <h1>La Jefa 90.8 FM</h1>
+      <p>La Celia</p>
+      <div id="track-title">Cargando transmisión…</div>
+    </div>
+
+    <span class="on-air-banner">SONANDO EN VIVO</span>
+
+    <div class="controls">
+      <button class="btn-round btn-small" id="mute-btn" title="Silenciar" aria-label="Silenciar">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"></polygon><path d="M15.54 8.46a5 5 0 0 1 0 7.07"></path><path d="M19.07 4.93a10 10 0 0 1 0 14.14"></path></svg>
+      </button>
+
+      <button class="btn-round" id="play-btn" title="Reproducir" aria-label="Reproducir">
+        <svg id="play-icon" viewBox="0 0 24 24" fill="currentColor"><polygon points="6 3 20 12 6 21 6 3"></polygon></svg>
+        <svg id="pause-icon" viewBox="0 0 24 24" fill="currentColor" style="display:none;"><rect x="5" y="3" width="5" height="18"></rect><rect x="14" y="3" width="5" height="18"></rect></svg>
+      </button>
+
+      <button class="btn-round btn-small" id="reload-btn" title="Reconectar" aria-label="Reconectar">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="23 4 23 10 17 10"></polyline><polyline points="1 20 1 14 7 14"></polyline><path d="M3.51 9a9 9 0 0 1 14.85-3.36L23 10M1 14l4.64 4.36A9 9 0 0 0 20.49 15"></path></svg>
+      </button>
+    </div>
+
+    <div class="volume-row">
+      <span>🔈</span>
+      <input type="range" id="volume" min="0" max="100" value="80">
+    </div>
+
+    <div id="status-msg">Sin transmisión configurada</div>
+  </div>
+</div>
+
+<audio id="audio" preload="none"></audio>
+
+<script>
+  /* ================================================================
+     CONFIGURACIÓN — edita aquí la URL del stream y las redes sociales
+     ================================================================ */
+  const CONFIG = {
+    STREAM_URL: "https://stream.zeno.fm/wx7guyut8druv",
+    STATION_NAME: "La Jefa 90.8 FM",
+    SHARE_TEXT: "La Jefa 90.8 FM — En Vivo desde La Celia, las 24 horas."
+  };
+
+  const audio        = document.getElementById('audio');
+
+  const playerView   = document.getElementById('player-view');
+  const backBtn      = document.getElementById('back-btn');
+  const playBtn      = document.getElementById('play-btn');
+  const playIcon     = document.getElementById('play-icon');
+  const pauseIcon    = document.getElementById('pause-icon');
+  const muteBtn      = document.getElementById('mute-btn');
+  const volSlider    = document.getElementById('volume');
+  const reloadBtn    = document.getElementById('reload-btn');
+  const disc         = document.getElementById('disc');
+  const statusMsg    = document.getElementById('status-msg');
+  const trackTitle   = document.getElementById('track-title');
+
+  const miniBar         = document.getElementById('mini-bar');
+  const miniPlay         = document.getElementById('mini-play');
+  const miniPlayIcon     = document.getElementById('mini-play-icon');
+  const miniPauseIcon    = document.getElementById('mini-pause-icon');
+  const miniMark         = document.getElementById('mini-mark');
+  const miniSubtitle     = document.getElementById('mini-subtitle');
+  const miniEq           = document.getElementById('mini-eq');
+  const miniVolBtn       = document.getElementById('mini-vol-btn');
+
+  audio.volume = 0.8;
+
+  function openPlayerView(){
+    playerView.classList.add('open');
+  }
+  function closePlayerView(){
+    playerView.classList.remove('open');
+  }
+
+  miniBar.addEventListener('click', (e) => {
+    if(e.target.closest('#mini-play')){
+      togglePlay();
+      return;
+    }
+    if(e.target.closest('#mini-vol-btn')){
+      toggleMute();
+      return;
+    }
+    openPlayerView();
+  });
+
+  backBtn.addEventListener('click', closePlayerView);
+
+  function setPlayingUI(isPlaying){
+    playIcon.style.display      = isPlaying ? 'none'  : 'block';
+    pauseIcon.style.display     = isPlaying ? 'block' : 'none';
+    miniPlayIcon.style.display  = isPlaying ? 'none'  : 'block';
+    miniPauseIcon.style.display = isPlaying ? 'block' : 'none';
+    disc.classList.toggle('spinning', isPlaying);
+    miniMark.classList.toggle('spinning', isPlaying);
+    miniEq.classList.toggle('paused', !isPlaying);
+  }
+
+  // Evita que el navegador reutilice una conexión vieja/fallida en caché:
+  // cada vez que cargamos el stream le agregamos un parámetro único.
+  function freshStreamUrl(){
+    const sep = CONFIG.STREAM_URL.includes('?') ? '&' : '?';
+    return CONFIG.STREAM_URL + sep + '_=' + Date.now();
+  }
+
+  function loadStream(){
+    if(!CONFIG.STREAM_URL){
+      statusMsg.textContent = 'Sin transmisión configurada';
+      trackTitle.textContent = 'Agrega la URL del stream en CONFIG.STREAM_URL';
+      return false;
+    }
+    audio.src = freshStreamUrl();
+    audio.load();
+    return true;
+  }
+
+  function attemptPlay(isRetry){
+    audio.play()
+      .then(() => {
+        statusMsg.textContent = 'Transmitiendo en vivo';
+        trackTitle.textContent = CONFIG.STATION_NAME + ' — En Vivo';
+        miniSubtitle.textContent = 'Sonando en vivo';
+        setPlayingUI(true);
+      })
+      .catch(() => {
+        if(!isRetry){
+          // Primer intento falló (a veces por una conexión en caché) —
+          // reintenta una vez de inmediato con una URL nueva antes de rendirse.
+          statusMsg.textContent = 'Reintentando…';
+          miniSubtitle.textContent = 'Reintentando…';
+          loadStream();
+          setTimeout(() => attemptPlay(true), 400);
+        } else {
+          statusMsg.textContent = 'No se pudo conectar al stream';
+          miniSubtitle.textContent = 'No se pudo conectar';
+        }
+      });
+  }
+
+  function togglePlay(){
+    if(audio.paused){
+      loadStream();
+      statusMsg.textContent = 'Conectando…';
+      miniSubtitle.textContent = 'Conectando…';
+      attemptPlay(false);
+    } else {
+      audio.pause();
+      statusMsg.textContent = 'Pausado';
+      miniSubtitle.textContent = 'Pausado';
+      setPlayingUI(false);
+    }
+  }
+
+  playBtn.addEventListener('click', togglePlay);
+  // OJO: mini-play y mini-vol-btn YA se manejan dentro del listener
+  // delegado de #mini-bar (más abajo). No agregar aquí un segundo
+  // listener directo sobre ellos: al estar dentro de #mini-bar, un
+  // solo toque disparaba togglePlay()/toggleMute() DOS veces (una por
+  // el listener directo y otra por el delegado), lo que causaba que
+  // al pausar, se reprodujera otra vez de inmediato.
+
+  reloadBtn.addEventListener('click', () => {
+    const wasPlaying = !audio.paused;
+    audio.pause();
+    setPlayingUI(false);
+    if(loadStream() && wasPlaying){
+      statusMsg.textContent = 'Reconectando…';
+      miniSubtitle.textContent = 'Reconectando…';
+      attemptPlay(false);
+    }
+  });
+
+  volSlider.addEventListener('input', (e) => {
+    audio.volume = e.target.value / 100;
+    audio.muted = false;
+  });
+
+  let lastVolume = 80;
+  function toggleMute(){
+    if(audio.muted || audio.volume === 0){
+      audio.muted = false;
+      audio.volume = lastVolume / 100;
+      volSlider.value = lastVolume;
+    } else {
+      lastVolume = volSlider.value;
+      audio.muted = true;
+      audio.volume = 0;
+      volSlider.value = 0;
+    }
+  }
+  muteBtn.addEventListener('click', toggleMute);
+  // miniVolBtn se maneja en el listener delegado de #mini-bar (ver abajo)
+
+  audio.addEventListener('waiting', () => { statusMsg.textContent = 'Cargando…'; });
+  audio.addEventListener('playing', () => { statusMsg.textContent = 'Transmitiendo en vivo'; });
+
+  /* ================================================================
+     BLOQUEO DE SCROLL / REBOTE — asegura que la pantalla de inicio
+     nunca se pueda deslizar hacia abajo en navegadores móviles.
+     El reproductor de pantalla completa sí permite scroll interno
+     por si el contenido no cabe en pantallas muy pequeñas.
+     ================================================================ */
+  document.addEventListener('touchmove', (e) => {
+    if(!e.target.closest('#player-view') && !e.target.closest('input[type=range]')){
+      e.preventDefault();
+    }
+  }, { passive:false });
+
+  /* ================================================================
+     SPLASH — pantalla de bienvenida con el logo, sin audio de intro.
+     Se muestra brevemente con su animación y luego pasa sola al sitio.
+     ================================================================ */
+  const splash = document.getElementById('splash-screen');
+  window.addEventListener('load', () => {
+    setTimeout(() => { splash.classList.add('hide'); }, 1700);
+  });
+
+  /* ================================================================
+     COMPARTIR — usa la Web Share API si está disponible; si no,
+     copia el enlace al portapapeles.
+     ================================================================ */
+  const shareBtn = document.getElementById('share-btn');
+  shareBtn.addEventListener('click', async () => {
+    const shareData = {
+      title: CONFIG.STATION_NAME,
+      text: CONFIG.SHARE_TEXT,
+      url: window.location.href
+    };
+    if (navigator.share) {
+      try { await navigator.share(shareData); } catch(e){ /* cancelado por el usuario */ }
+      return;
+    }
+    if (navigator.clipboard) {
+      try {
+        await navigator.clipboard.writeText(shareData.url);
+        const label = shareBtn.querySelector('span');
+        const original = label.textContent;
+        label.textContent = '¡Copiado!';
+        setTimeout(() => { label.textContent = original; }, 1800);
+      } catch(e){ /* ignorar */ }
+    }
+  });
+
+  /* ================================================================
+     PWA — instalación y service worker
+     ================================================================ */
+  const installBtn = document.getElementById('install-btn');
+  let deferredPrompt = null;
+
+  window.addEventListener('beforeinstallprompt', (e) => {
+    e.preventDefault();
+    deferredPrompt = e;
+    installBtn.classList.add('show');
+  });
+
+  installBtn.addEventListener('click', async () => {
+    if(!deferredPrompt) return;
+    installBtn.classList.remove('show');
+    deferredPrompt.prompt();
+    await deferredPrompt.userChoice;
+    deferredPrompt = null;
+  });
+
+  window.addEventListener('appinstalled', () => {
+    installBtn.classList.remove('show');
+    deferredPrompt = null;
+  });
+
+  // Si ya corre instalada (standalone), no mostrar el botón
+  if (window.matchMedia('(display-mode: standalone)').matches || window.navigator.standalone === true) {
+    installBtn.classList.remove('show');
+  }
+
+  if ('serviceWorker' in navigator) {
+    window.addEventListener('load', () => {
+      navigator.serviceWorker.register('sw.js').then(reg => {
+        // Revisa si hay una nueva versión disponible y la activa de inmediato
+        reg.addEventListener('updatefound', () => {
+          const newWorker = reg.installing;
+          newWorker.addEventListener('statechange', () => {
+            if (newWorker.state === 'activated') {
+              // La nueva versión ya está activa; el próximo reload la usará
+            }
+          });
+        });
+      }).catch(err => console.warn('SW registration failed:', err));
+    });
+
+    // Si el service worker cambia (nueva versión tomó control), recarga una vez
+    let refreshing = false;
+    navigator.serviceWorker.addEventListener('controllerchange', () => {
+      if (refreshing) return;
+      refreshing = true;
+      window.location.reload();
+    });
+  }
+</script>
+
+</body>
+</html>
