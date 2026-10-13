@@ -1,10 +1,10 @@
 /*
- * Service Worker — La Jefa 90.8 FM (La Celia)
+ * Service Worker — La Jefa Llanos Orientales
  * PWA cache strategy: robust / network-first for live-changing assets.
  * Cambia CACHE_VERSION cada vez que publiques una versión importante.
  */
-const CACHE_VERSION = 'v4-2026-09-13';
-const CACHE_NAME = `la-jefa-908-la-celia-${CACHE_VERSION}`;
+const CACHE_VERSION = 'v5-la-jefa-llanos-orientales';
+const CACHE_NAME = `la-jefa-llanos-orientales-${CACHE_VERSION}`;
 const OFFLINE_URL = './index.html';
 
 const PRECACHE_ASSETS = [
@@ -59,7 +59,7 @@ self.addEventListener('activate', (event) => {
     const keys = await caches.keys();
     await Promise.all(
       keys
-        .filter((key) => key.startsWith('la-jefa-908-la-celia-') && key !== CACHE_NAME)
+        .filter((key) => key.startsWith('la-jefa-llanos-orientales-') && key !== CACHE_NAME)
         .map((key) => caches.delete(key))
     );
 
